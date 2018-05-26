@@ -12,8 +12,8 @@ class TimesheetsController < ApplicationController
   def home
     @current_employee = Employee.current(current_user.email)
     if @current_employee
-      @current_timesheet = update_timesheets || @current_timesheet
-      @current_job = @current_timesheet.send(:[],"Job")
+      @current_timesheet = update_timesheets || set_current_timesheet
+      @current_job = @current_timesheet ? @current_timesheet[:job] : nil
     else
       @invalid_user = true
     end
