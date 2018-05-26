@@ -1,0 +1,42 @@
+
+<% msg = @current_job ? @current_job["Name"] : "No active time sheet"%>
+<% if @invalid_user %>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      You are currently not set up in Gingko.  
+      Ask your Manager to be added or email Gingko support at service@gingko.com
+    </li>
+  </ul>
+<% else %>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <%= "Current Job: #{msg}" %>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <% unless @current_job %>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <%= link_to "Start", timesheets_start_path, class: "btn btn-primary" %>
+          </div>
+        <% else %>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <%= link_to "Stop", timesheets_end_path, class: "btn btn-primary" %>
+          </div>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <%= link_to "Switch", timesheets_start_path, class: "btn btn-primary" %>
+          </div>
+        <% end %>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <%= link_to "TimeSheets", timesheets_path , class: "btn btn-primary" %>
+          </div>
+      </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+          <%= link_to "Add Receipt", receipts_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </li>
+  </ul>
+<% end %>
