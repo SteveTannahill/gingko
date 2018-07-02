@@ -5,7 +5,12 @@ class ReceiptsController < ApplicationController
   before_action :authenticate_user_in_airtable
   
   def form
-    
+    redirect_to @current_employee["_expenses_form"]
+  end
+  
+  def expense
+    flash[:notice] = "Expense form submitted successfully."
+    redirect_to root_path
   end
 
 end

@@ -2,9 +2,12 @@ Rails.application.routes.draw do
   devise_for :users
   root 'timesheets#home'
   get 'timesheets/' => 'timesheets#index'
+  
   get 'timesheets/start' => 'timesheets#startjob'
   get 'timesheets/end' => 'timesheets#endjob'
+  get 'timesheets/:doc_id' => 'timesheets#home'
   get 'receipts/' => 'receipts#form'
+  get 'expense/:doc_id' => 'receipts#expense'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

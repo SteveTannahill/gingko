@@ -11,7 +11,9 @@ class Employee < Airrecord::Table
   end
   
   def current_timesheet
-    self["Time Sheets"].find{|t| t["Time Out"].nil?}
+    if self.fields.find{|k, v| k.eql? "Time Sheets"}
+      self["Time Sheets"].find{|t| t["Time Out"].nil?}
+    end
   end
   
 end
