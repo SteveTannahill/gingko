@@ -79,4 +79,21 @@ Rails.application.configure do
   
   config.logger = Logger.new(STDOUT) 
   config.logger.level = Logger::DEBUG
+  
+  Rails.application.routes.default_url_options[:host] = 'gingko-app.herokuapp.com'
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default :charset => "utf-8"
+  
+  config.action_mailer.smtp_settings = {
+    :user_name => 'apikey',
+    :password => ENV["SENDGRID_PASSWORD"],
+    :domain => 'mygingko.com',
+    :address => 'smtp.sendgrid.net',
+    :port => 2525,
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
 end
