@@ -12,7 +12,11 @@ class TimesheetsController < ApplicationController
   
   def home
     @record_id = params[:doc_id]
-    @current_employee = Employee.current(current_user.email)
+    @current_employee = Employee.current(current_user.user_config)
+    unless @current_employee
+      current_user.user_config.try("destroy")
+      @current_employee = search_airtable_for_employee
+    end
     unless @current_employee 
       @invalid_user = true
     else
@@ -21,15 +25,12 @@ class TimesheetsController < ApplicationController
       else
         @current_timesheet = set_current_timesheet
       end
-    @current_job = @current_timesheet ? @current_timesheet["Job"] : nil
+    @current_job = @current_timesheet ? Job.from_timesheet(@current_timesheet, @current_user.user_config)  : nil
     end
   end
   
   def startjob
     end_current_time_sheet
-    #get the employee reference and add it to url
-    # employee_id = @current_employee.id 
-    # @timesheet_form_url = @current_employee["_time_sheet_form"] + "?prefill_Employee%20Reference=" + employee_id
     redirect_to @current_employee["_time_sheet_form"]
   end
   
@@ -39,21 +40,18 @@ class TimesheetsController < ApplicationController
   end
   
   def update_timesheets record_id
-    @ct = Timesheet.find(record_id)
-    # timesheets = Timesheet.unprocessed_timesheets
+    @ct = Timesheet._find(record_id, @current_user.user_config)
     employee_id = @current_employee.id
-    # ct = timesheets.find{|t| t["Time Out"].nil? and t["Employee Reference"] == employee_id}
     if @ct
       @ct["Time In"] = @ct["created_at"]
-      # ct["Employee"] = Array(ct["Employee Reference"])
       @ct["Employee"] = Array(employee_id)
       @ct.save
     end
-    @ct = Timesheet.find(record_id)
+    @ct = Timesheet._find(record_id, @current_user.user_config)
   end
   
   def set_current_timesheet
-    @current_timesheet = @current_employee.current_timesheet
+    @current_timesheet = @current_employee.current_timesheet(@current_user.user_config)
   end
   
   def end_current_time_sheet

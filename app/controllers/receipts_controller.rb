@@ -9,7 +9,7 @@ class ReceiptsController < ApplicationController
   end
   
   def expense
-    flash[:notice] = "Expense form submitted successfully."
+    flash[:notice] = "Receipt submitted successfully."
     redirect_to root_path
   end
 

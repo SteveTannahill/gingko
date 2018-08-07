@@ -29,7 +29,7 @@ gem 'devise'
 
 gem 'bootstrap'
 
-gem 'pg', '~> 0.15'
+gem 'pg', '~> 0.20.0'
 
 gem 'rails_12factor', group: :production
 gem 'puma'
