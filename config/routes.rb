@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   
   get 'timesheets/start' => 'timesheets#startjob'
   get 'timesheets/end' => 'timesheets#endjob'
+  get 'timesheets/endmessage' => 'timesheets#endjobmessage'
   get 'timesheets/:doc_id' => 'timesheets#home'
   get 'receipts/' => 'receipts#form'
   get 'expense/:doc_id' => 'receipts#expense'

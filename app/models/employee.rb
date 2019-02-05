@@ -8,7 +8,14 @@ class Employee < Airrecord::Table
   def self.current user_config
     if user_config
       self.base_key = user_config.base_id
-      find(user_config.employee_id)
+      cur = find(user_config.employee_id)
+      #check if the record is still current
+      #compare emails with case insensitive
+      if cur and cur["Status"] == "Active" and cur["Email"].try(:downcase) == user_config.try(:user).try(:email).try(:downcase)
+        cur
+      else
+        nil
+      end
     end
   end
   

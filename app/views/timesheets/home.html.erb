@@ -1,5 +1,7 @@
 
 <% msg = @current_job ? @current_job["Name"] : "No active time sheet"%>
+
+<%= params[:notes] %>
 <% if @invalid_user %>
   <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -19,6 +21,9 @@
             <%= link_to "Start", timesheets_start_path, class: "btn btn-primary" %>
           </div>
         <% else %>
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <%= link_to "Stop with Message", timesheets_endmessage_path, class: "btn btn-primary" %>
+          </div>
           <div class="btn-group mr-2" role="group" aria-label="First group">
             <%= link_to "Stop", timesheets_end_path, class: "btn btn-primary" %>
           </div>

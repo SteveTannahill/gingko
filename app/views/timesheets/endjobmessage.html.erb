@@ -1,0 +1,16 @@
+<% msg = @current_job ? @current_job["Name"] : "No active time sheet"%>
+
+
+
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <%= "Current Job: #{msg}" %>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <%= form_tag timesheets_end_path, method: :get do %>
+      <%= text_area_tag :notes, @current_timesheet["Notes"], rows: 5, class: "form-control rounded-0", style: 'width:100%;' %></br>
+      <%= submit_tag "Stop", class: "btn btn-primary" %>
+      <%= link_to "Cancel", root_path, class: "btn btn-primary" %>
+    <% end %>
+  </li>
+</ul>

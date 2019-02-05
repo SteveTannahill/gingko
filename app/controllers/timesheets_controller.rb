@@ -39,6 +39,14 @@ class TimesheetsController < ApplicationController
     redirect_to root_path
   end
   
+  def endjobmessage
+    
+    unless @current_timesheet 
+      redirect_to root_path
+    end
+    @current_job = @current_timesheet ? Job.from_timesheet(@current_timesheet, @current_user.user_config)  : nil
+  end
+  
   def update_timesheets record_id
     @ct = Timesheet._find(record_id, @current_user.user_config)
     employee_id = @current_employee.id
@@ -57,6 +65,7 @@ class TimesheetsController < ApplicationController
   def end_current_time_sheet
     if @current_timesheet
       @current_timesheet["Time Out"] = Time.now
+      @current_timesheet["Notes"] = params[:notes] || @current_timesheet["Notes"]
       @current_timesheet.save
     end
   end
