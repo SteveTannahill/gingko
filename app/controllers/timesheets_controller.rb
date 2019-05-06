@@ -20,7 +20,7 @@ class TimesheetsController < ApplicationController
     unless @current_employee 
       @invalid_user = true
     else
-      if @record_id 
+      if @record_id
         @current_timesheet = update_timesheets @record_id
       else
         @current_timesheet = set_current_timesheet
@@ -30,7 +30,9 @@ class TimesheetsController < ApplicationController
   end
   
   def startjob
+    print "startjob"
     end_current_time_sheet
+    print "end of end"
     redirect_to @current_employee["_time_sheet_form"]
   end
   
@@ -51,8 +53,12 @@ class TimesheetsController < ApplicationController
     @ct = Timesheet._find(record_id, @current_user.user_config)
     employee_id = @current_employee.id
     if @ct
+      loc = @current_user.location
       @ct["Time In"] = @ct["created_at"]
       @ct["Employee"] = Array(employee_id)
+      if loc
+        @ct["Location In"] = Geocoder.search([loc.lat, loc.lng]).try(:first).try(:data).try(:[],"display_name")
+      end
       @ct.save
     end
     @ct = Timesheet._find(record_id, @current_user.user_config)
@@ -64,8 +70,12 @@ class TimesheetsController < ApplicationController
   
   def end_current_time_sheet
     if @current_timesheet
+      loc = @current_user.location
       @current_timesheet["Time Out"] = Time.now
       @current_timesheet["Notes"] = params[:notes] || @current_timesheet["Notes"]
+      if loc
+        @current_timesheet["Location Out"] = Geocoder.search([loc.lat, loc.lng]).try(:first).try(:data).try(:[],"display_name")
+      end
       @current_timesheet.save
     end
   end

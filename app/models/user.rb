@@ -6,4 +6,5 @@ class User < ActiveRecord::Base
          :timeoutable
          
   has_one :user_config
+  has_one :location
 end

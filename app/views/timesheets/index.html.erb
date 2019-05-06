@@ -1,10 +1,12 @@
 
 <h1> <%= @record_id %> </h1>
+<div id="geo">Waiting for Location...</div>
 <table>
   <tr>
   <% unless @current_timesheet %>
     <td><%= link_to "Start", timesheets_start_path, class: "btn btn-primary" %></td>
   <% else %>
+    <td><%= link_to "Stop with Message", timesheets_endmessage_path, class: "btn btn-primary" %></td>
     <td><%= link_to "Stop", timesheets_end_path, class: "btn btn-primary" %></td>
     <td><%= link_to "Switch", timesheets_start_path, class: "btn btn-primary" %></td>
   <% end %>
@@ -13,4 +15,21 @@
 
 <h1>Timesheets</h1>
 
+<script type="text/javascript">
+  if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("Get", "/location.json?lat="+pos.lat+"&lng="+pos.lng, true);
+            xhttp.send();
+            document.getElementById("geo").innerHTML = "Location Found: (" + pos.lat + " " + pos.lng +")";
+          })};
+  
+</script>
+
 <iframe class="airtable-embed" src="<%= @timesheet_view_url %>?backgroundColor=purple&layout=card&viewControls=on" frameborder="0" onmousewheel="" width="100%" height="533" style="background: transparent; border: 1px solid #ccc;"></iframe>
+

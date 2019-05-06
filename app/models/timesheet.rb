@@ -11,8 +11,14 @@ class Timesheet < Airrecord::Table
   end
   
   def self.current_timesheet employee, user_config
-    self.base_key = user_config.base_id
-    employee["Time Sheets"].find{|t| t["Time Out"].nil?}
+    begin
+      self.base_key = user_config.base_id
+      employee["Time Sheets"].find{|t| t["Time Out"].nil?}
+    rescue StandardError => e
+      logger = Logger.new(STDOUT)
+      logger.error e
+      nil
+    end
   end
   
   def self._find record_id, user_config

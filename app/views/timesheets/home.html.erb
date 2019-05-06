@@ -1,6 +1,7 @@
 
-<% msg = @current_job ? @current_job["Name"] : "No active time sheet"%>
+<% msg = @current_job ? @current_job["Name"] : ""%>
 
+<div id="geo">Waiting for Location...</div>
 <%= params[:notes] %>
 <% if @invalid_user %>
   <ul class="list-group">
@@ -11,8 +12,14 @@
   </ul>
 <% else %>
   <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <%= "Current Job: #{msg}" %>
+    <li class="list-group-item">
+      Current Timesheet:</br>
+      <% if @current_timesheet %>
+        Start: <div id="ts"><%= @current_timesheet.try(:[],'Time In') %></div>
+        <%= "Job: #{msg}" %>
+      <% else %>
+        No Current Timesheet
+      <% end %>
     </li>
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -75,3 +82,28 @@
     </li>
   </ul>
 <% end %>
+
+
+
+<script type="text/javascript">
+  if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("Get", "/location.json?lat="+pos.lat+"&lng="+pos.lng, true);
+            xhttp.send();
+            document.getElementById("geo").innerHTML = "Location Found: (" + pos.lat + " " + pos.lng +")";
+          })};
+  
+  var ts = document.getElementById("ts");
+  if (ts) {
+    var date = new Date(ts.innerHTML);
+    date.toString();
+    document.getElementById("ts").innerHTML = date;
+  };
+  
+</script>
